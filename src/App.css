@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.MuiPaper-root {
+  width: 250px;
+}
+
+.card {
+  display: flex;
+  justify-content: space-around;
+}
