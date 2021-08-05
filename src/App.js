@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import Main from "./components/Main";
 import axios from "axios";
+import Context from "./Context/Contex";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import { Upload } from "./components/Upload";
 
 function App() {
+  const [images, setImages] = useState([]);
+  const [count, setCount] = useState(0);
   const [title, setTitle] = useState("React App");
+  const [arr, setArr] = useState(["react, js", "angular"]);
+  const ref = useRef(0);
+  const [examp, setExamp] = useState("Example");
   const [data, setData] = useState([]);
   const [category, setCategory] = useState("jewelery");
-
+  console.log(ref);
   useEffect(() => {
     const axiosData = async () => {
       const result = await axios(
@@ -18,6 +28,27 @@ function App() {
     axiosData();
   }, [category]);
 
+  function newExamp() {
+    setExamp("newTitle");
+  }
+
+  const b = {
+    examp,
+    newExamp,
+  };
+  const c = {
+    arr,
+  };
+  useEffect(() => {
+    ref.current = ref.current + 1;
+  }, []);
+
+  const onChange = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex);
+    setImages(imageList);
+  };
+
   return (
     <div className="App">
       <button onClick={() => setCategory("electronics")}>electronics</button>
@@ -28,10 +59,19 @@ function App() {
         women's clothing
       </button>
       <input type="file" />
-      <h1>{title}</h1>
-      {data.map((item) => {
-        return <img src={item.image} style={{ width: "150px" }} />;
-      })}
+      <h1>{count}</h1>
+      <h2>{ref.current}</h2>
+      <button></button>
+      <Context.Provider value={c}>
+        <Header />
+      </Context.Provider>
+      <Context.Provider value={b}>
+        {data.map((item) => {
+          return <Main {...item} />;
+        })}
+        <Footer />
+      </Context.Provider>
+      <Upload images={images} onChange={onChange} />
     </div>
   );
 }
